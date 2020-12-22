@@ -34,6 +34,8 @@ Pressing the settings button will open up another window where the user can chan
 
 ![image](https://user-images.githubusercontent.com/76227825/102937702-c2ce5b00-4478-11eb-9baf-7fb21de8c0bb.png)
 
+The default difficulty is easy. Every time a "return to main menu" button is pressed, the difficulty is reset to the default difficulty. 
+
 ### "High Scores"
 
 Pressing the high scores button will open a window that shows the user's top 10 best attempts for solving a sudoku board. Each listing will show the amount of incorrect guesses along with the difficulty level (in brackets) for that run, the time taken to solve that board, and the time/date the run was completed.
