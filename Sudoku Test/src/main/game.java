@@ -23,10 +23,12 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class game {
 	
 	JFrame frame;
+	JPanel panel;
 	int width = 390;
 	int height = 440;
 	int componentOffset = 37;
@@ -74,17 +76,23 @@ public class game {
 		
 		/* Creates start frame and the buttons/labels associated with it */
 		
-		JFrame startScreen = new JFrame();
-		startScreen.setSize(width / 2, height / 2);
-		startScreen.setLocationRelativeTo(null);
-		startScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		JFrame startFrame = new JFrame();
+		startFrame.setPreferredSize(new Dimension(width / 2, height / 2));
+		startFrame.setResizable(false);
+		startFrame.setLocationRelativeTo(null);
+		startFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		JPanel startScreen = new JPanel();
+		startScreen.setPreferredSize(startFrame.getPreferredSize());
 		startScreen.setLayout(null);
-		startScreen.setResizable(false);
+		
+		startFrame.getContentPane().add(startScreen);
+		startFrame.pack();
 		
 		JLabel title = new JLabel("Sudoku");
 		title.setFont(new Font(null, Font.BOLD, 20));
 		title.setSize(getCorrectSize(title));
-		title.setLocation((startScreen.getWidth() / 2) - (title.getWidth() / 2) - 7, 25);
+		title.setLocation((startScreen.getWidth() / 2) - (title.getWidth() / 2), 25);
 		title.setVisible(true);
 		
 		JButton startButton = new JButton("Start Game");
@@ -96,7 +104,7 @@ public class game {
 			
 			public void actionPerformed(ActionEvent e) {
 				
-				startScreen.setVisible(false);
+				startFrame.setVisible(false);
 				startGame();
 				
 			}
@@ -114,38 +122,46 @@ public class game {
 				
 				/* Creates settings frame and all of the buttons/labels associated with it */
 				
-				startScreen.setVisible(false);
+				startFrame.setVisible(false);
 				
 				JFrame settingsFrame = new JFrame("Sudoku Settings");
-				settingsFrame.setSize(startScreen.getWidth() + 125, startScreen.getHeight());
-				settingsFrame.setLocationRelativeTo(null);
+				JPanel settingsPanel = new JPanel();
+				
 				settingsFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-				settingsFrame.setLayout(null);
+				settingsFrame.setPreferredSize(new Dimension(startScreen.getWidth() + 150, startScreen.getHeight() + 50));
+				settingsFrame.setLocationRelativeTo(null);
 				settingsFrame.setResizable(false);
 				settingsFrame.addWindowListener(new WindowAdapter() {
 					
 					public void windowClosing(WindowEvent e) {
 						
-						startScreen.setVisible(true);
+						startFrame.setVisible(true);
 						settingsFrame.dispose();
 						
 					}
 					
 				});
 				
-				JLabel difficultyExplanation = new JLabel("A harder difficulty means less numbers will visible");
-				difficultyExplanation.setSize(getCorrectSize(difficultyExplanation));
-				difficultyExplanation.setLocation(10, settingsFrame.getHeight() - 80);
-				difficultyExplanation.setVisible(true);
+				settingsPanel.setSize(settingsFrame.getPreferredSize());
+				settingsPanel.setLayout(null);
+				settingsPanel.setVisible(true);
+				
+				settingsFrame.getContentPane().add(settingsPanel);
+				settingsFrame.pack();
 				
 				JLabel currentDifficulty = new JLabel("Currently, " + (81 - difficultyCount) + "/81 numbers are visible (" + difficulty + ")");
 				currentDifficulty.setSize(getCorrectSize(currentDifficulty));
-				currentDifficulty.setLocation((settingsFrame.getWidth() / 2) - (currentDifficulty.getWidth() / 2) - 10, difficultyExplanation.getY() + currentDifficulty.getHeight() + 2);
+				currentDifficulty.setLocation((settingsPanel.getWidth() / 2) - (currentDifficulty.getWidth() / 2), settingsPanel.getHeight() - currentDifficulty.getHeight() - 5);
 				currentDifficulty.setVisible(true);
+				
+				JLabel difficultyExplanation = new JLabel("A harder difficulty means less numbers will visible");
+				difficultyExplanation.setSize(getCorrectSize(difficultyExplanation));
+				difficultyExplanation.setLocation((settingsPanel.getWidth() / 2) - (difficultyExplanation.getWidth() / 2) + 5, currentDifficulty.getY() - difficultyExplanation.getHeight() - 3);
+				difficultyExplanation.setVisible(true);
 				
 				JButton easy = new JButton("Easy (" + (81 - easyCount) + ")");
 				easy.setSize(settings.getWidth() + 5, settings.getHeight());
-				easy.setLocation(currentDifficulty.getX() + (currentDifficulty.getWidth() / 2) - (easy.getWidth() / 2), startButton.getY() - 20);
+				easy.setLocation((settingsPanel.getWidth() / 2) - (easy.getWidth() / 2), startButton.getY() - 20);
 				easy.setVisible(true);
 				easy.addActionListener(new ActionListener() {
 					
@@ -155,7 +171,7 @@ public class game {
 						difficulty = "easy";
 						currentDifficulty.setText("Currently, " + (81 - difficultyCount) + "/81 numbers are visible (" + difficulty + ")");
 						currentDifficulty.setSize(getCorrectSize(currentDifficulty));
-						currentDifficulty.setLocation((settingsFrame.getWidth() / 2) - (currentDifficulty.getWidth() / 2) - 10, difficultyExplanation.getY() + currentDifficulty.getHeight() + 2);
+						currentDifficulty.setLocation((settingsPanel.getWidth() / 2) - (currentDifficulty.getWidth() / 2), settingsPanel.getHeight() - currentDifficulty.getHeight() - 5);
 						
 					}
 					
@@ -173,7 +189,7 @@ public class game {
 						difficulty = "medium";
 						currentDifficulty.setText("Currently, " + (81 - difficultyCount) + "/81 numbers are visible (" + difficulty + ")");
 						currentDifficulty.setSize(getCorrectSize(currentDifficulty));
-						currentDifficulty.setLocation((settingsFrame.getWidth() / 2) - (currentDifficulty.getWidth() / 2) - 10, difficultyExplanation.getY() + currentDifficulty.getHeight() + 2);
+						currentDifficulty.setLocation((settingsPanel.getWidth() / 2) - (currentDifficulty.getWidth() / 2), settingsPanel.getHeight() - currentDifficulty.getHeight() - 5);
 						
 					}
 					
@@ -191,7 +207,7 @@ public class game {
 						difficulty = "hard";
 						currentDifficulty.setText("Currently, " + (81 - difficultyCount) + "/81 numbers are visible (" + difficulty + ")");
 						currentDifficulty.setSize(getCorrectSize(currentDifficulty));
-						currentDifficulty.setLocation((settingsFrame.getWidth() / 2) - (currentDifficulty.getWidth() / 2) - 10, difficultyExplanation.getY() + currentDifficulty.getHeight() + 2);
+						currentDifficulty.setLocation((settingsPanel.getWidth() / 2) - (currentDifficulty.getWidth() / 2), settingsPanel.getHeight() - currentDifficulty.getHeight() - 5);
 						
 					}
 					
@@ -202,12 +218,12 @@ public class game {
 				difficulty.setLocation(hard.getX() + (hard.getWidth() / 2) - (difficulty.getWidth() / 2) + 5, 15);
 				difficulty.setVisible(true);
 				
-				settingsFrame.add(easy);
-				settingsFrame.add(medium);
-				settingsFrame.add(hard);
-				settingsFrame.add(difficulty);
-				settingsFrame.add(difficultyExplanation);
-				settingsFrame.add(currentDifficulty);
+				settingsPanel.add(easy);
+				settingsPanel.add(medium);
+				settingsPanel.add(hard);
+				settingsPanel.add(difficulty);
+				settingsPanel.add(difficultyExplanation);
+				settingsPanel.add(currentDifficulty);
 			
 				settingsFrame.setVisible(true);
 				
@@ -226,25 +242,32 @@ public class game {
 				
 				/* Creates difficulty frame and all of the labels associated with it */
 				
-				startScreen.setVisible(false);
+				startFrame.setVisible(false);
 				
 				JFrame highscoreFrame = new JFrame();
-				highscoreFrame.setSize(450, 365);
-				highscoreFrame.setLocationRelativeTo(null);
-				highscoreFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-				highscoreFrame.setLayout(null);
-				highscoreFrame.setResizable(false);
+				JPanel highscorePanel = new JPanel();
 				
+				highscoreFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+				highscoreFrame.setResizable(false);
+				highscoreFrame.setPreferredSize(new Dimension(450, 365));
+				highscoreFrame.setLocationRelativeTo(null);
 				highscoreFrame.addWindowListener(new WindowAdapter() {
 					
 					public void windowClosing(WindowEvent e) {
 						
-						startScreen.setVisible(true);
+						startFrame.setVisible(true);
 						highscoreFrame.dispose();
 						
 					}
 					
 				});
+
+				highscorePanel.setPreferredSize(highscoreFrame.getPreferredSize());
+				highscorePanel.setLayout(null);
+				highscorePanel.setVisible(true);
+				
+				highscoreFrame.getContentPane().add(highscorePanel);
+				highscoreFrame.pack();
 				
 				ArrayList<Score> highscoreList = new ArrayList<Score>();
 				Score[] sortedHighScoreList = new Score[10];
@@ -297,17 +320,18 @@ public class game {
 				JLabel highscoreIncorrectLabel = new JLabel("Incorrect");
 				highscoreIncorrectLabel.setSize(getCorrectSize(highscoreIncorrectLabel));
 				highscoreIncorrectLabel.setLocation(50, 5);
-				highscoreFrame.add(highscoreIncorrectLabel);
 				
 				JLabel highscoreDateLabel = new JLabel("Date");
 				highscoreDateLabel.setSize(getCorrectSize(highscoreDateLabel));
 				highscoreDateLabel.setLocation(highscoreFrame.getWidth() - highscoreDateLabel.getWidth() - 70, 5);
-				highscoreFrame.add(highscoreDateLabel);
 				
 				JLabel highscoreTimeLabel = new JLabel("Time Taken");
 				highscoreTimeLabel.setSize(getCorrectSize(highscoreTimeLabel));
 				highscoreTimeLabel.setLocation(200, 5);
-				highscoreFrame.add(highscoreTimeLabel);
+				
+				highscorePanel.add(highscoreDateLabel);
+				highscorePanel.add(highscoreIncorrectLabel);
+				highscorePanel.add(highscoreTimeLabel);
 				
 				/* Ranks the highscores based on lowest penalty Score */
 				
@@ -340,7 +364,7 @@ public class game {
 					numberRanking.setLocation(15, highscoreIncorrectLabel.getY() + highscoreIncorrectLabel.getHeight() + 10 + (i * 30));
 					numberRanking.setVisible(true);
 					
-					highscoreFrame.add(numberRanking);
+					highscorePanel.add(numberRanking);
 					
 					if(bestScore != null) {
 						
@@ -432,9 +456,9 @@ public class game {
 						highscoreDateCount.setLocation(5 + highscoreDateLabel.getX() + (highscoreDateLabel.getWidth() / 2) - (highscoreDateCount.getWidth() / 2), highscoreDateLabel.getY() + highscoreDateLabel.getHeight() + 10 + (i * 30));
 						highscoreDateCount.setVisible(true);
 						
-						highscoreFrame.add(highscoreIncorrectCount);
-						highscoreFrame.add(highscoreTimeCount);
-						highscoreFrame.add(highscoreDateCount);
+						highscorePanel.add(highscoreIncorrectCount);
+						highscorePanel.add(highscoreTimeCount);
+						highscorePanel.add(highscoreDateCount);
 						
 					}
 					
@@ -450,26 +474,35 @@ public class game {
 		startScreen.add(startButton);
 		startScreen.add(settings);
 		startScreen.add(highscore);
-		
 		startScreen.setVisible(true);
+		
+		startFrame.setVisible(true);
 
 	}
 	
 	public void startGame() {
 		
 		frame = new JFrame();
+		panel = new JPanel();
 		
-		frame.setSize(width, height);
+		frame.setPreferredSize(new Dimension(width, height));
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLayout(null);
 		frame.setResizable(false);
+		
+		panel.setLayout(null);
+		panel.setPreferredSize(frame.getPreferredSize());
+		panel.setVisible(true);
+		
+		frame.getContentPane().add(panel);
+		frame.pack();
 		
 		setBoard();
 		addNumberCell();
 		removeNumbers();
 		checkInitialNumFinish();
 		addInfo();
+		
 		frame.setVisible(true);	
 		
 	}
@@ -485,7 +518,7 @@ public class game {
 			
 			comps[i] = new boardComp("vertical");
 			comps[i].setLocation(100 * (i + 1) + componentOffset, componentOffset - 10);
-			frame.add(comps[i]);
+			panel.add(comps[i]);
 			
 		}
 		
@@ -494,7 +527,7 @@ public class game {
 			
 			comps[i] = new boardComp("horizontal");
 			comps[i].setLocation(0 + componentOffset, 100 * (i + 1) + componentOffset - 10);
-			frame.add(comps[i]);
+			panel.add(comps[i]);
 			
 		}
 		
@@ -503,7 +536,7 @@ public class game {
 			
 			comps[i] = new boardComp("horizontal");
 			comps[i].setLocation(0 + componentOffset, 299 * i + componentOffset - 10);
-			frame.add(comps[i]);
+			panel.add(comps[i]);
 			
 		}
 		
@@ -511,7 +544,7 @@ public class game {
 			
 			comps[i] = new boardComp("vertical");
 			comps[i].setLocation(300 * i - (i * 2) + componentOffset, 0 + componentOffset - 10);
-			frame.add(comps[i]);
+			panel.add(comps[i]);
 			
 		}
 		
@@ -526,7 +559,7 @@ public class game {
 				
 				board[i][j] = new Cell(0);
 				board[i][j].setLocation(2 + j * 33 + componentOffset, 2 + i * 33 + componentOffset - 10);
-				frame.add(board[i][j]);
+				panel.add(board[i][j]);
 				board[i][j].setEnabled(false);
 				
 				int k = i;
@@ -657,7 +690,7 @@ public class game {
 					
 					board[i][j].setEnabled(false);
 					board[i][j].setVisible(false);
-					frame.remove(board[i][j]);
+					panel.remove(board[i][j]);
 					board[i][j] = null;
 					
 				}
@@ -674,7 +707,7 @@ public class game {
 				
 				inputButtons[i] = new numberButton(i + 1);
 				inputButtons[i].setLocation(12 + (40 * i), 300 + componentOffset);
-				frame.add(inputButtons[i]);
+				panel.add(inputButtons[i]);
 				
 				int k = i;
 
@@ -725,9 +758,9 @@ public class game {
 			/* Creates a button that resets all incorrect cells to normal */
 			
 			JButton resetWrong = new JButton("Reset Wrong Answers");
-			resetWrong.setSize((frame.getWidth() / 2) - 15, 25);
-			resetWrong.setLocation(frame.getWidth() - resetWrong.getWidth() - 20, inputButtons[0].getY() + inputButtons[0].getHeight() + 5);
-			frame.add(resetWrong);
+			resetWrong.setSize((panel.getWidth() / 2) - 7, 25);
+			resetWrong.setLocation((panel.getWidth() / 2) + 3, inputButtons[0].getY() + inputButtons[0].getHeight() + 5);
+			panel.add(resetWrong);
 			
 			resetWrong.addActionListener(new ActionListener() {
 				
@@ -758,7 +791,7 @@ public class game {
 			JButton menuReturn = new JButton("Return to Menu");
 			menuReturn.setSize(resetWrong.getSize());
 			menuReturn.setLocation(5, resetWrong.getY());
-			frame.add(menuReturn);
+			panel.add(menuReturn);
 			
 			menuReturn.addActionListener(new ActionListener() {
 				
@@ -810,11 +843,18 @@ public class game {
 		 */
 		
 		JDialog wonFrame = new JDialog();
-		wonFrame.setSize(250, 150);
+		JPanel wonPanel = new JPanel();
+		
+		wonFrame.setPreferredSize(new Dimension(250, 150));
 		wonFrame.setResizable(false);
 		wonFrame.setLocationRelativeTo(null);
-		wonFrame.setLayout(null);
 		wonFrame.setTitle("You won!");
+		
+		wonPanel.setPreferredSize(wonFrame.getPreferredSize());
+		wonPanel.setLayout(null);
+		wonPanel.setVisible(true);
+		wonFrame.getContentPane().add(wonPanel);
+		wonFrame.pack();
 		
 		JLabel incorrect = new JLabel();
 		
@@ -829,7 +869,7 @@ public class game {
 		}
 		
 		incorrect.setSize(getCorrectSize(incorrect));
-		incorrect.setLocation((wonFrame.getWidth() / 2) - (incorrect.getWidth() / 2), 20);
+		incorrect.setLocation((wonPanel.getWidth() / 2) - (incorrect.getWidth() / 2), 20);
 		incorrect.setVisible(true);
 		
 		JLabel time = new JLabel();
@@ -845,8 +885,8 @@ public class game {
 		}
 		
 		JButton menu = new JButton("Main Menu");
-		menu.setSize((wonFrame.getWidth() / 2) - 12, 30);
-		menu.setLocation(2, wonFrame.getHeight() - menu.getHeight() - 40 - 2);
+		menu.setSize((wonPanel.getWidth() / 2) - 7, 30);
+		menu.setLocation(4, wonPanel.getHeight() - menu.getHeight() - 4);
 		menu.setVisible(true);
 		
 		menu.addActionListener(new ActionListener() {
@@ -866,7 +906,7 @@ public class game {
 		
 		JButton exit = new JButton("Exit");
 		exit.setSize(menu.getSize());
-		exit.setLocation(menu.getX() + exit.getWidth() + 3, menu.getY());
+		exit.setLocation(menu.getX() + exit.getWidth() + 6, menu.getY());
 		exit.setVisible(true);
 		
 		exit.addActionListener(new ActionListener() {
@@ -883,10 +923,10 @@ public class game {
 		time.setLocation(incorrect.getX() + (incorrect.getWidth() / 2) - (time.getWidth() / 2), incorrect.getY() + incorrect.getHeight() + 5);
 		time.setVisible(true);
 		
-		wonFrame.add(incorrect);
-		wonFrame.add(time);
-		wonFrame.add(menu);
-		wonFrame.add(exit);
+		wonPanel.add(incorrect);
+		wonPanel.add(time);
+		wonPanel.add(menu);
+		wonPanel.add(exit);
 		
 		wonFrame.setVisible(true);
 		
@@ -998,8 +1038,8 @@ public class game {
 		
 		time.setVisible(true);
 		incorrect.setVisible(true);
-		frame.add(time);
-		frame.add(incorrect);
+		panel.add(time);
+		panel.add(incorrect);
 		
 		updateTime = new Thread() {
 			
@@ -1170,7 +1210,7 @@ public class game {
 	
 	public static void main(String[] args) {
 		
-		new game();		
+		game game = new game();		
 		
 	}
 	
